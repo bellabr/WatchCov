@@ -2,9 +2,19 @@
 
 <html>
     <head>
-        <title>Home Page</title>
+        <title>Canada COVID Tracker</title>
+        <!-- Library scripts -->
+        <script src="//cdn.amcharts.com/lib/4/core.js"></script>
+        <script src="//cdn.amcharts.com/lib/4/maps.js"></script>
+        <!-- Canada GeoJSON Data -->
+        <script src="https://cdn.amcharts.com/lib/4/geodata/canadaLow.js"></script>
+        <!-- Stylesheets -->
+        <link rel="stylesheet" type="text/css" href="styles/index.css"/>
     </head>
     <body>
-        <h1>Hello World</h1>
+        <div id="map"></div>
+        <input type="button" value="Dataset 1" onclick="addSeries();" />
+        <input type="button" value="Dataset 2" onclick="removeSeries();" />
     </body>
+    <script src="scripts/index.js"></script>
 </html>
