@@ -34,19 +34,22 @@ const EXAMPLE = [
         "title": "Ottawa",
         "latitude": 45.4235,
         "longitude": -75.6979,
-        "scale": 5
+        "scale": 5,
+        "cases": 1248
     },
     {
         "title": "Vancouver",
         "longitude": -123.1207,
         "latitude": 49.2827,
-        "scale": 2
+        "scale": 2,
+        "cases": 943
     },
     {
         "title": "Yellowknife",
         "latitude": 62.4540,
         "longitude": -114.3718,
-        "scale": 1
+        "scale": 1,
+        "cases": 67
     }
 ]
 
@@ -55,19 +58,29 @@ const EXAMPLE2 = [
         "title": "Toronto",
         "latitude": 43.6532,
         "longitude": -79.3832,
-        "scale": 10
+        "scale": 10,
+        "cases": 4348
     },
     {
         "title": "Calgary",
         "longitude": -114.0719,
         "latitude": 51.0447,
-        "scale": 3
+        "scale": 3,
+        "cases": 1290
     },
     {
         "title": "Yellowknife",
         "latitude": 62.4540,
         "longitude": -114.3718,
-        "scale": 0.5
+        "scale": 0.5,
+        "cases": 16
+    },
+    {
+        "title": "Edmonton",
+        "latitude": 53.5461,
+        "longitude": -113.4938,
+        "scale": 2.5,
+        "cases": 1904
     }
 ]
 
@@ -91,7 +104,7 @@ function makeImageSeries() {
     let imageSeries = new am4maps.MapImageSeries();
     imageSeries.mapImages.template.propertyFields.longitude = "longitude";
     imageSeries.mapImages.template.propertyFields.latitude = "latitude";
-    imageSeries.mapImages.template.tooltipText = "{title}";
+    imageSeries.mapImages.template.tooltipText = "{title}: {cases} cases";
     // imageSeries.mapImages.template.propertyFields.url = "url"; redirect to data source maybe?
 
     // Create point to plot
