@@ -33,20 +33,23 @@
                 <div class="filter-label">Gender</div>
             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                 <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onchange="handleRadio('male');">
-                <label class="btn btn-outline-primary" for="btnradio1">Male</label>
+                <label class="btn btn-outline-danger" for="btnradio1">Male</label>
               
                 <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onchange="handleRadio('female');">
-                <label class="btn btn-outline-primary" for="btnradio2">Female</label>
+                <label class="btn btn-outline-danger" for="btnradio2">Female</label>
               
                 <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" onchange="handleRadio();" checked>
-                <label class="btn btn-outline-primary" for="btnradio3">All</label>
+                <label class="btn btn-outline-danger" for="btnradio3">All</label>
               </div>
             </div>
 
             
             <div class="filter-item">
               <div class="filter-label">Age Group</div>
+              <div id="range-wrap">
               <input type="range" class="form-range" min="0" max="5" step="1" id="ageRange" onchange="handleAgeGroup()">
+              <output id="ageRange-bubble"></output>
+              </div>
             </div>
 
             <div class="filter-item">
@@ -93,11 +96,30 @@
         }
 
         // age group handler
-        function handleAgeGroup() {
-            const groups = ['<20', '20-39', '40-59', '60-69', '70-79', '>80'];
+        const groups = ['<20', '20-39', '40-59', '60-69', '70-79', '>80'];
+        function handleAgeGroup() { 
             PARAMS['ageGroup'] = groups[document.getElementById("ageRange").value];
             viewQueryString();
         }
+
+
+        // https://css-tricks.com/value-bubbles-for-range-inputs/
+        function setBubble(range, bubble) {
+            const val = range.value;
+            const min = range.min ? range.min : 0;
+            const max = range.max ? range.max : 100;
+            const newVal = Number(((val - min) * 100) / (max - min));
+            bubble.innerHTML = groups[val];
+
+            bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
+            bubble.style.visibility = 'visible';
+        }
+        const range = document.getElementById("ageRange");
+        const bubble = document.getElementById("ageRange-bubble");
+        range.addEventListener("input", () => {
+            setBubble(range, bubble);
+        });
+
         
         // start of tracking
         const START = "2020-01-02";
