@@ -40,13 +40,14 @@ def process_filter():
 
     return result
 
-# return JSON case file
+# return JSON vaccine file
 @app.route('/api/vaccine', methods=["GET"])
 def send_vaccine():
     with open('./client/cases/test.JSON') as f:
         vaccine = json.load(f)
     return json.dumps(vaccine)
 
+# processing range for vaccine data
 @app.route('/api/vaccine/filter', methods=["GET"])
 def filter_vaccine():
     dateA = request.args.get('dateA')
