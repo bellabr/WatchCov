@@ -15,18 +15,27 @@ def send_cases():
         case = json.load(f)
     return json.dumps(case)
 
-# process age request
-@app.route('/api/cases/age', methods=["GET"])
-def process_age():
-    startAge = request.args.get('startAge')
-    endAge = request.args.get('endAge')
-    return "Ages %s to %s" % (startAge, endAge)
-
-# process date request
-@app.route('/api/cases/date', methods=["GET"])
-def process_date():
+# Processing cases
+@app.route('/api/cases/filter', methods=["GET"])
+def process_filter():
+    result = ''
+    ageRange = request.args.get('ageRange')
     startTime = request.args.get('startTime')
-    processedStart = datetime.datetime.fromisoformat(startTime[:-1])
     endTime = request.args.get('endTime')
-    processedEnd = datetime.datetime.fromisoformat(endTime[:-1])
-    return "Time " + str(processedStart) + " to " + str(processedEnd)
+    gender = request.args.get('gender')
+
+    #age
+    if(ageRange != None):
+        result += "Ages Range %s \n" % (ageRange)
+
+    #date
+    if(startTime != None and request.args.get('endTime') != None): 
+        processedStart = datetime.datetime.fromisoformat(startTime[:-1])
+        processedEnd = datetime.datetime.fromisoformat(endTime[:-1])
+        result += "Time " + str(processedStart) + " to " + str(processedEnd) + "\n"
+
+    #gender
+    if(gender != None):
+        result += "gender " + gender + "\n"
+
+    return result
