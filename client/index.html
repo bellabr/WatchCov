@@ -8,13 +8,82 @@
         <script src="//cdn.amcharts.com/lib/4/maps.js"></script>
         <!-- Canada GeoJSON Data -->
         <script src="https://cdn.amcharts.com/lib/4/geodata/canadaLow.js"></script>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+        <!-- jQuery -->
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <!-- Pikaday -->
+        <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+        <!-- Date Range Picker -->
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         <!-- Stylesheets -->
         <link rel="stylesheet" type="text/css" href="styles/index.css"/>
     </head>
+
     <body>
-        <div id="map"></div>
-        <input type="button" value="Dataset 1" onclick="addSeries();" />
-        <input type="button" value="Dataset 2" onclick="removeSeries();" />
+        <div id="filters" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="btnradio1">Male</label>
+              
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio2">Female</label>
+              
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio3">All</label>
+              </div>
+
+            
+            <div>
+              <label for="ageRange" class="form-label">Age Group</label>
+              <input type="range" class="form-range" min="0" max="5" step="1" id="ageRange">
+            </div>
+
+            <div>
+                <input type="text" name="dates" value="01/01/2018 - 01/15/2018" />
+            </div>
+
+          </div>
+
+        <div id="main">
+            <div id="map"></div>
+            <input type="button" value="Dataset 1" onclick="addSeries();" />
+            <input type="button" value="Dataset 2" onclick="removeSeries();" />
+            <input type="button" value="Filters" onclick="openNav();" />
+        </div>
     </body>
+
     <script src="scripts/index.js"></script>
+    <script>
+        // Toggle filter menu
+        function openNav() {
+          document.getElementById("filters").style.width = "25vw";
+          document.getElementById("main").style.marginLeft = "25vw";
+        }
+        
+        function closeNav() {
+          document.getElementById("filters").style.width = "0";
+          document.getElementById("main").style.marginLeft= "0";
+        }
+
+        
+        // start of tracking
+        const START = "2020-01-02";
+        $('input[name="dates"]').daterangepicker({
+            opens: 'left',
+            startDate: new Date(START),
+            minDate: new Date(START),
+            endDate: new Date(),
+            maxDate: new Date()
+        }, 
+            (start, end, label) => {
+                console.log(start.toISOString())
+            }
+        );
+    </script>
 </html>
