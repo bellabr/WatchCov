@@ -8,6 +8,6 @@ Project description
 ## Authors
 
 * **Christopher Ma**
-* **Member 2**
+* **Annabella Bregazzi**
 * **Member 3**
 * **Member 4**
