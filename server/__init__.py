@@ -45,7 +45,7 @@ def process_filter():
     if(exposure != None):
         result += "exposure " + exposure + "\n"
 
-    return json.dumps(query(ageRange, gender, processedStart, processedEnd))
+    return json.dumps(query(ageRange, gender, processedStart, processedEnd, exposure, status))
 
 # return JSON vaccine file
 @app.route('/api/vaccine', methods=["GET"])
