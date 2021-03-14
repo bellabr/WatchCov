@@ -27,25 +27,33 @@
     <body>
         <div id="filters" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+            <div id="filter-container">
+            <div class="filter-item">
+                <div class="filter-label">Gender</div>
             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onchange="handleRadio('male');">
                 <label class="btn btn-outline-primary" for="btnradio1">Male</label>
               
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onchange="handleRadio('female');">
                 <label class="btn btn-outline-primary" for="btnradio2">Female</label>
               
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" onchange="handleRadio();" checked>
                 <label class="btn btn-outline-primary" for="btnradio3">All</label>
               </div>
-
-            
-            <div>
-              <label for="ageRange" class="form-label">Age Group</label>
-              <input type="range" class="form-range" min="0" max="5" step="1" id="ageRange">
             </div>
 
-            <div>
+            
+            <div class="filter-item">
+              <div class="filter-label">Age Group</div>
+              <input type="range" class="form-range" min="0" max="5" step="1" id="ageRange" onchange="handleAgeGroup()">
+            </div>
+
+            <div class="filter-item">
+                <div class="filter-label">Date Range</div>
                 <input type="text" name="dates" value="01/01/2018 - 01/15/2018" />
+            </div>
+
             </div>
 
           </div>
@@ -55,6 +63,10 @@
             <input type="button" value="Dataset 1" onclick="addSeries();" />
             <input type="button" value="Dataset 2" onclick="removeSeries();" />
             <input type="button" value="Filters" onclick="openNav();" />
+            <div>
+                <span>(Debugging) Current query string: </span>
+                <span id="query-string"></span>
+            </div>
         </div>
     </body>
 
@@ -71,6 +83,21 @@
           document.getElementById("main").style.marginLeft= "0";
         }
 
+        // gender radio callback
+        function handleRadio(gender) {
+            if (gender === undefined)
+                delete PARAMS['gender'];
+            else
+                PARAMS['gender'] = gender;
+            viewQueryString();
+        }
+
+        // age group handler
+        function handleAgeGroup() {
+            const groups = ['<20', '20-39', '40-59', '60-69', '70-79', '>80'];
+            PARAMS['ageGroup'] = groups[document.getElementById("ageRange").value];
+            viewQueryString();
+        }
         
         // start of tracking
         const START = "2020-01-02";
@@ -82,8 +109,15 @@
             maxDate: new Date()
         }, 
             (start, end, label) => {
-                console.log(start.toISOString())
+                PARAMS['startDate'] = start.toISOString();
+                PARAMS['endDate'] = end.toISOString();
+                viewQueryString();
             }
         );
+
+        function viewQueryString() {
+            document.getElementById('query-string').innerText = formatParams(PARAMS);
+        }
+
     </script>
 </html>

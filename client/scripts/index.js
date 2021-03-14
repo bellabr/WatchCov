@@ -2,6 +2,9 @@
     Create AmMap using JSON data from server
 */
 
+// global parameters object for filtering
+const PARAMS = {};
+
 
 // Create Map Chart
 let canadaMap = am4core.create("map", am4maps.MapChart);
@@ -95,6 +98,36 @@ function addSeries() {
     plotImageSeries(imageSeries, EXAMPLE2);
 }
 
+/* API Request */
+
+/**
+ * Send a get request to retrive data 
+ */
+function getData() {
+    let xhttp = new XMLHttpRequest();
+    let params = getParams();
+
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        const json = JSON.parse(this.responseText);
+        let data = [];
+        for (const region in json) {
+            data.push({
+                "title": region,
+                "latitude": json[region]["latitude"],
+                "longitude": json[region]["longitude"],
+                "cases": json[region]["cases"],
+                "scale": 3
+            })
+        }
+        plotImageSeries(imageSeries, data);
+      }
+    };
+    xhttp.open("GET", `/api/cases${formatParams(params)}`, true);
+    xhttp.send();
+}
+// getData();
+
 /* Helper functions */
 
 /**
@@ -120,7 +153,7 @@ function makeImageSeries() {
 
     // Animate points
     circle.events.on("inited", event => {
-        event.target.animate([{ property: "opacity", from: 0, to: 1 }], 1000, am4core.ease.circleOut)
+        event.target.animate([{ property: "opacity", from: 0, to: 0.8 }], 1000, am4core.ease.circleOut)
     })
 
     return imageSeries;
@@ -145,10 +178,29 @@ function plotImageSeries(series, data) {
     imageSeries.data = data;
 }
 
+
 /**
  * Removes the image series from the canadaMap chart.
- * @param {object} series - The image series to remove
+ * @param {MapImageSeries} series - The image series to remove
  */
 function removeImageSeries(series) {
     canadaMap.series.removeIndex(canadaMap.series.indexOf(series)).dispose();
+}
+
+
+/** 
+ * Format get query string. Modified from:
+ * https://stackoverflow.com/questions/8064691/how-do-i-pass-along-variables-with-xmlhttprequest
+ * @param {Object} params - The get parameters
+ */
+function formatParams(params){
+    if (Object.keys(params).length === 0) // no params
+        return "";
+    return "?" + Object
+          .keys(params)
+          .map(function(key){
+            return params[key] !== null ? key+"="+encodeURIComponent(params[key]) : ''
+          })
+          .filter(s => {return s !== ''})
+          .join("&");
 }
