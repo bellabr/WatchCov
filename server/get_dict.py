@@ -1,6 +1,14 @@
 from typing import Dict
 from datetime import datetime
 import csv
+import pandas as pd
+
+
+def download_data() -> None:
+    url = 'https://opendata.arcgis.com/datasets/4dabb4afab874804ba121536efaaacb4_0.csv'
+    data = pd.read_csv(url)
+    data.to_csv("server/COVID19_case_details.csv")
+    
 
 def load_dict(filename: str) -> Dict:
     """Create a global dictionary of <filename> containing only values in Canada.
@@ -20,7 +28,8 @@ def load_dict(filename: str) -> Dict:
                 pass
     return d
 
-gd = load_dict('server\COVID19_case_details.csv')
+download_data()
+gd = load_dict('server/COVID19_case_details.csv')
 
 def query(ageRange: str = None, gender: str = None, \
     startDate: datetime = None, endDate: datetime = None, \
