@@ -32,13 +32,13 @@
             <div class="filter-item">
                 <div class="filter-label">Gender</div>
             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onchange="handleRadio('male');">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onchange="APIwrapper(() => handleRadio('Male'));">
                 <label class="btn btn-outline-danger" for="btnradio1">Male</label>
               
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onchange="handleRadio('female');">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onchange="APIwrapper(() => handleRadio('Female'));">
                 <label class="btn btn-outline-danger" for="btnradio2">Female</label>
               
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" onchange="handleRadio();" checked>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" onchange="APIwrapper(handleRadio);" checked>
                 <label class="btn btn-outline-danger" for="btnradio3">All</label>
               </div>
             </div>
@@ -47,7 +47,7 @@
             <div class="filter-item">
               <div class="filter-label">Age Group</div>
               <div id="range-wrap">
-              <input type="range" class="form-range" min="0" max="5" step="1" id="ageRange" onchange="handleAgeGroup()">
+              <input type="range" class="form-range" min="0" max="5" step="1" id="ageRange" onchange="APIwrapper(handleAgeGroup)">
               <output id="ageRange-bubble"></output>
               </div>
             </div>
@@ -69,7 +69,10 @@
             <div>
                 <span>(Debugging) Current query string: </span>
                 <span id="query-string"></span>
+                <div id="spinner" class="spinner-border" role="status">
+                </div>
             </div>
+
         </div>
     </body>
 
@@ -102,7 +105,6 @@
             viewQueryString();
         }
 
-
         // https://css-tricks.com/value-bubbles-for-range-inputs/
         function setBubble(range, bubble) {
             const val = range.value;
@@ -131,8 +133,9 @@
             maxDate: new Date()
         }, 
             (start, end, label) => {
-                PARAMS['startDate'] = start.toISOString();
-                PARAMS['endDate'] = end.toISOString();
+                PARAMS['startTime'] = start.toISOString();
+                PARAMS['endTime'] = end.toISOString();
+                getData();
                 viewQueryString();
             }
         );

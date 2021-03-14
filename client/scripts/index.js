@@ -104,8 +104,8 @@ function addSeries() {
  * Send a get request to retrive data 
  */
 function getData() {
+    showSpinner();
     let xhttp = new XMLHttpRequest();
-    let params = getParams();
 
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -121,12 +121,19 @@ function getData() {
             })
         }
         plotImageSeries(imageSeries, data);
+        hideSpinner();
+        console.log(data)
       }
     };
-    xhttp.open("GET", `/api/cases${formatParams(params)}`, true);
+    xhttp.open("GET", `/api/cases${formatParams(PARAMS)}`, true);
     xhttp.send();
 }
-// getData();
+
+// wrapper function to update params and get data
+function APIwrapper(f) {
+    f();
+    getData();
+}
 
 /* Helper functions */
 
@@ -203,4 +210,19 @@ function formatParams(params){
           })
           .filter(s => {return s !== ''})
           .join("&");
+}
+
+
+/**
+ * Display the spinner
+ */
+function showSpinner() {
+    document.getElementById("spinner").style.visibility = "visible";
+}
+
+/**
+ * Hide the spinner
+ */
+function hideSpinner() {
+    document.getElementById("spinner").style.visibility = "hidden";
 }
