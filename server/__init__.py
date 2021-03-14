@@ -1,4 +1,5 @@
 from flask import Flask, request
+from server.get_dict import query
 import json, datetime
 
 app = Flask(__name__, static_folder='../client', static_url_path='/')
@@ -7,16 +8,8 @@ app = Flask(__name__, static_folder='../client', static_url_path='/')
 def index():
     return app.send_static_file('index.html')
 
-
-# return JSON case file
-@app.route('/api/cases', methods=["GET"])
-def send_cases():
-    with open('./client/cases/test.JSON') as f:
-        case = json.load(f)
-    return json.dumps(case)
-
 # Processing cases
-@app.route('/api/cases/filter', methods=["GET"])
+@app.route('/api/cases', methods=["GET"])
 def process_filter():
     result = ''
     ageRange = request.args.get('ageRange')
@@ -38,7 +31,7 @@ def process_filter():
     if(gender != None):
         result += "gender " + gender + "\n"
 
-    return result
+    return json.dumps(query(ageRange, gender))
 
 # return JSON vaccine file
 @app.route('/api/vaccine', methods=["GET"])
