@@ -2,7 +2,7 @@
 
 Project description
 
-a tracker for the number of cases reported in Canada which visualizes data with configurable filters
+WatchCov provides a simple case visualization tool for anyone curious about the distribution of COVID-19 cases in Canada. WatchCov allows users to filter COVID-19 case data by any combination of age range, gender, case report date interval, method of exposure and case status providing useful visuals to represent the data of interest.
 
 ## Getting Started
 
