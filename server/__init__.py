@@ -39,3 +39,18 @@ def process_filter():
         result += "gender " + gender + "\n"
 
     return result
+
+# return JSON case file
+@app.route('/api/vaccine', methods=["GET"])
+def send_vaccine():
+    with open('./client/cases/test.JSON') as f:
+        vaccine = json.load(f)
+    return json.dumps(vaccine)
+
+@app.route('/api/vaccine/filter', methods=["GET"])
+def filter_vaccine():
+    dateA = request.args.get('dateA')
+    dateB = request.args.get('dateB')
+    dateTimeA = datetime.datetime.fromisoformat(dateA[:-1])
+    dateTimeB = datetime.datetime.fromisoformat(dateB[:-1])  
+    return "Date " + str(dateTimeA) + " to " + str(dateTimeB) + "\n"
