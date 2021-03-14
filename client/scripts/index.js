@@ -3,7 +3,7 @@
 */
 
 // global parameters object for filtering
-const PARAMS = {};
+let PARAMS = {};
 
 
 // Create Map Chart
