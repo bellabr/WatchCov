@@ -19,6 +19,13 @@
     color: white;
 }
 
+input[type="range"]::-webkit-slider-thumb {
+ background-color: #dc3545;
+ opacity: 0.9;
+ width: 10px;
+ height: 20px;
+}
+
 /* https://www.w3schools.com/howto/howto_js_sidenav.asp */
 .sidenav {
     height: 100%;
@@ -63,3 +70,31 @@
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
   }
+
+
+/* https://css-tricks.com/value-bubbles-for-range-inputs/ */
+#range-wrap {
+  position: relative;
+  margin: 0 auto 3rem;
+}
+
+#ageRange-bubble {
+  background: #dc3545;
+  color: white;
+  padding: 4px 12px;
+  position: absolute;
+  border-radius: 4px;
+  visibility: hidden;
+  transform: translateX(-50%);
+  top: 30px;
+}
+
+#ageRange-bubble::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #dc3545;
+  top: -1px;
+  left: 50%;
+}
