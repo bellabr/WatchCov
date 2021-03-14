@@ -2,6 +2,7 @@ from typing import Dict
 from datetime import datetime
 import csv
 import pandas as pd
+import pickle
 
 
 def download_data() -> None:
@@ -28,8 +29,9 @@ def load_dict(filename: str) -> Dict:
                 pass
     return d
 
-download_data()
-gd = load_dict('server/COVID19_case_details.csv')
+gd = None
+with open('test-1.pkl', 'rb') as f:
+    gd = pickle.load(f)
 
 def query(ageRange: str = None, gender: str = None, \
     startDate: datetime = None, endDate: datetime = None, \
