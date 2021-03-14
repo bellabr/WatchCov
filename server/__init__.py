@@ -17,6 +17,7 @@ def process_filter():
     endTime = request.args.get('endTime')
     gender = request.args.get('gender')
 
+
     #age
     if(ageRange != None):
         result += "Ages Range %s \n" % (ageRange)
@@ -26,7 +27,10 @@ def process_filter():
         processedStart = datetime.datetime.fromisoformat(startTime[:-1])
         processedEnd = datetime.datetime.fromisoformat(endTime[:-1])
         result += "Time " + str(processedStart) + " to " + str(processedEnd) + "\n"
-
+    else:
+        processedStart = startTime
+        processedEnd = endTime
+        
     #gender
     if(gender != None):
         result += "gender " + gender + "\n"
