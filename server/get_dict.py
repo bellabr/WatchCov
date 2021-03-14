@@ -1,5 +1,5 @@
 from typing import Dict
-from datetime import datetime, date
+from datetime import datetime
 import csv
 
 def load_dict(filename: str) -> Dict:
@@ -22,8 +22,8 @@ def load_dict(filename: str) -> Dict:
 
 gd = load_dict('server\COVID19_case_details.csv')
 
-def query(ageRange: str = None, gender: str = None, 
-startDate: datetime = None, endDate: datetime = None) -> Dict:
+def query(ageRange: str = None, gender: str = None, \
+    startDate: datetime = None, endDate: datetime = None) -> Dict:
     """Create a dictionary using <gd> of the cases that fall into the category <ageRange>, <gender>, 
     <startDate>, <endDate>, if they are not None, in the format specified:
 
@@ -53,7 +53,14 @@ startDate: datetime = None, endDate: datetime = None) -> Dict:
 
 def _satisfies_condition(key, ageRange, gender, startDate, endDate) -> bool:
     """A helper function for query
+
+    Maps <ageRange> from "A" -> '<20', "B" -> '20-29', ...
     """
+    if ageRange is not None:
+        agesMap = {"A": '<20', "B": '20-29', "C": '30-39', "D": '40-49', \
+        "E": '50-59', "F": '60-69', "G": '70-79', "H": '80+'}
+        ageRange = agesMap[ageRange]
+    
     if ageRange is None or gd[key]['ageRange'] == ageRange:
         if gender is None or gd[key]['gender'] == gender:
             if startDate is None or startDate <= gd[key]['dateReported'] <= endDate:
@@ -61,7 +68,9 @@ def _satisfies_condition(key, ageRange, gender, startDate, endDate) -> bool:
     return False
 
 if __name__ == '__main__':
-    t = query(gender='Female', ageRange='70-79', startDate=datetime(2020, 3, 11), endDate=datetime(2020, 3, 11))
+    t = query(gender='Female', ageRange="A", startDate=datetime(2020, 4, 8), endDate=datetime(2020, 4, 13))
 
     for key in t:
         print(f'{key}: {t[key]}')
+
+    # print(_satisfies_condition(3, "D", 'Female', datetime(2020, 5, 4), datetime(2020, 5, 5)))
