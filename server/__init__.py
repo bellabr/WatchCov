@@ -16,6 +16,8 @@ def process_filter():
     startTime = request.args.get('startTime')
     endTime = request.args.get('endTime')
     gender = request.args.get('gender')
+    status = request.args.get('status')
+    exposure = request.args.get('exposure')
 
 
     #age
@@ -30,10 +32,18 @@ def process_filter():
     else:
         processedStart = startTime
         processedEnd = endTime
-        
+
     #gender
     if(gender != None):
         result += "gender " + gender + "\n"
+
+    #case status
+    if(status != None):
+        result += "status " + status + "\n"
+
+    #exposure
+    if(exposure != None):
+        result += "exposure " + exposure + "\n"
 
     return json.dumps(query(ageRange, gender, processedStart, processedEnd))
 
