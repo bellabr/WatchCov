@@ -105,6 +105,11 @@ function makeImageSeries() {
     circle.propertyFields.fill = "color";
     circle.propertyFields.scale = "scale";
 
+    // Animate points
+    circle.events.on("inited", event => {
+        event.target.animate([{ property: "opacity", from: 0, to: 1 }], 1000, am4core.ease.circleOut)
+    })
+
     return imageSeries;
 }
 
