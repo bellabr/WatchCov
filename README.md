@@ -2,12 +2,14 @@
 
 Project description
 
+a tracker for the number of cases reported in Canada which visualizes data with configurable filters
+
 ## Getting Started
 
 
 ## Authors
 
 * **Christopher Ma**
-* **Member 2**
+* **Sunny Xiao 2**
 * **Member 3**
 * **Member 4**
