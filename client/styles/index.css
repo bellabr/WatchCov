@@ -1,3 +1,7 @@
+body {
+    
+}
+
 #map {
     width: 100%;
     height: 90vh;
@@ -26,8 +30,44 @@ input[type="range"]::-webkit-slider-thumb {
  height: 20px;
 }
 
+#dateRange {
+  width: 100%;
+}
+
 #spinner {
   visibility: hidden;
+}
+
+
+#stats-table {
+  padding: 5px;
+  position: absolute;
+  top: 10px;
+  right: -40vw;
+  transition: right 1s;
+  transition-timing-function: ease-in-out;
+  background-color: #212529;
+}
+
+#top-table {
+  overflow: auto;
+  height: 70vh;
+  max-width: 25vw;
+}
+
+#case-count-container {
+  border: 1px solid white;
+}
+
+#top-ten-title, #case-count-title, #case-count {
+  font-size: 1.5em;
+  color: #f1f1f1;
+  text-align: center;
+  font-weight: bold;
+}
+
+#case-count {
+  font-size: 3em;
 }
 
 
@@ -39,7 +79,7 @@ input[type="range"]::-webkit-slider-thumb {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #111;
+    background-color: #212529;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;

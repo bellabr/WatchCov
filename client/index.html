@@ -32,14 +32,48 @@
             <div class="filter-item">
                 <div class="filter-label">Gender</div>
             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onchange="APIwrapper(() => handleRadio('Male'));">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onchange="APIwrapper(() => handleRadioGender('Male'));">
                 <label class="btn btn-outline-danger" for="btnradio1">Male</label>
               
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onchange="APIwrapper(() => handleRadio('Female'));">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onchange="APIwrapper(() => handleRadioGender('Female'));">
                 <label class="btn btn-outline-danger" for="btnradio2">Female</label>
               
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" onchange="APIwrapper(handleRadio);" checked>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" onchange="APIwrapper(handleRadioGender);" checked>
                 <label class="btn btn-outline-danger" for="btnradio3">All</label>
+              </div>
+            </div>
+
+            <div class="filter-item">
+                <div class="filter-label">Case Status</div>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio2" id="status-btn1" autocomplete="off" onchange="APIwrapper(() => handleRadioStatus('Active'));">
+                <label class="btn btn-outline-danger" for="status-btn1">Active</label>
+              
+                <input type="radio" class="btn-check" name="btnradio2" id="status-btn2" autocomplete="off" onchange="APIwrapper(() => handleRadioStatus('Recovered'));">
+                <label class="btn btn-outline-danger" for="status-btn2">Recovered</label>
+
+                <input type="radio" class="btn-check" name="btnradio2" id="status-btn3" autocomplete="off" onchange="APIwrapper(() => handleRadioStatus('Deceased'));">
+                <label class="btn btn-outline-danger" for="status-btn3">Deceased</label>
+              
+                <input type="radio" class="btn-check" name="btnradio2" id="status-btn4" autocomplete="off" onchange="APIwrapper(handleRadioStatus);" checked>
+                <label class="btn btn-outline-danger" for="status-btn4">All</label>
+              </div>
+            </div>
+
+            <div class="filter-item">
+                <div class="filter-label">Exposure Type</div>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio3" id="exposure-btn1" autocomplete="off" onchange="APIwrapper(() => handleRadioExposure('Travel-Related Outbreak'));">
+                <label class="btn btn-outline-danger" for="exposure-btn1">Travel</label>
+              
+                <input type="radio" class="btn-check" name="btnradio3" id="exposure-btn2" autocomplete="off" onchange="APIwrapper(() => handleRadioExposure('Close Contact'));">
+                <label class="btn btn-outline-danger" for="exposure-btn2">Local</label>
+              
+                <input type="radio" class="btn-check" name="btnradio3" id="exposure-btn3" autocomplete="off" onchange="APIwrapper(() => handleRadioExposure('Not Reported'));">
+                <label class="btn btn-outline-danger" for="exposure-btn3">Unknown</label>
+
+                <input type="radio" class="btn-check" name="btnradio3" id="exposure-btn4" autocomplete="off" onchange="APIwrapper(handleRadioExposure);" checked>
+                <label class="btn btn-outline-danger" for="exposure-btn4">All</label>
               </div>
             </div>
 
@@ -54,7 +88,7 @@
 
             <div class="filter-item">
                 <div class="filter-label">Date Range</div>
-                <input id="dateRange" type="text" name="dates" value="01/01/2018 - 01/15/2018" />
+                <input id="dateRange" type="text" name="dates" value="" />
             </div>
 
             <div class="filter-item">
@@ -67,16 +101,34 @@
 
         <div id="main">
             <div id="map"></div>
-            <input type="button" value="Dataset 1" onclick="addSeries();" />
-            <input type="button" value="Dataset 2" onclick="removeSeries();" />
-            <input type="button" value="Filters" onclick="openNav();" />
+            <input type="button" class="btn btn-danger" value="Filters" onclick="openNav();" />
+            <input type="button" class="btn btn-danger" value="Show Stats" id="toggle-stats-btn" onclick="toggleStats();" />
             <div>
                 <span>(Debugging) Current query string: </span>
                 <span id="query-string"></span>
                 <div id="spinner" class="spinner-border" role="status">
                 </div>
             </div>
+        </div>
 
+        <div id="stats-table">
+            <div id="top-ten-title">Regional Case Counts</div>
+            <div id="top-table">
+            <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Region</th>
+                    <th scope="col">Count</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+              </table>
+            </div>
+              <div id="case-count-container">
+                <div id="case-count-title">Total Case Count</div>
+                <div id="case-count"></div>
+              </div>
         </div>
     </body>
 
@@ -94,11 +146,29 @@
         }
 
         // gender radio callback
-        function handleRadio(gender) {
+        function handleRadioGender(gender) {
             if (gender === undefined)
                 delete PARAMS['gender'];
             else
                 PARAMS['gender'] = gender;
+            viewQueryString();
+        }
+
+        // status radio callback
+        function handleRadioStatus(status) {
+            if (status === undefined)
+                delete PARAMS['status'];
+            else
+                PARAMS['status'] = status;
+            viewQueryString();
+        }
+
+        // exposure radio callback
+        function handleRadioExposure(exposure) {
+            if (exposure === undefined)
+                delete PARAMS['exposure'];
+            else
+                PARAMS['exposure'] = exposure;
             viewQueryString();
         }
 
@@ -168,5 +238,20 @@
             getData();
         }
 
+        // toggle statistics menu
+        let stats = false;
+        function toggleStats() {
+            const statsTable = document.getElementById("stats-table");
+            const btn = document.getElementById("toggle-stats-btn");
+            if (stats) {
+                statsTable.style.right = "-40vw";
+                btn.value = "Show Stats";
+            } else {
+                statsTable.style.right = "10px";
+                btn.value = "Hide Stats";
+            }
+            stats = !stats;
+        }
+        getData();
     </script>
 </html>

@@ -111,7 +111,9 @@ function getData() {
       if (this.readyState == 4 && this.status == 200) {
         const json = JSON.parse(this.responseText);
         let data = [];
+        let count = 0;
         for (const region in json) {
+            count += json[region]["cases"];
             data.push({
                 "title": region,
                 "latitude": json[region]["latitude"],
@@ -120,9 +122,14 @@ function getData() {
                 "scale": 3
             })
         }
+        data.sort((a, b) => {
+            return b["cases"] - a["cases"];
+        })
+        console.log(data);
         plotImageSeries(imageSeries, data);
+        updateTable(data);
+        document.getElementById("case-count").innerText = count.toLocaleString();
         hideSpinner();
-        console.log(data)
       }
     };
     xhttp.open("GET", `/api/cases${formatParams(PARAMS)}`, true);
@@ -212,7 +219,6 @@ function formatParams(params){
           .join("&");
 }
 
-
 /**
  * Display the spinner
  */
@@ -225,4 +231,27 @@ function showSpinner() {
  */
 function hideSpinner() {
     document.getElementById("spinner").style.visibility = "hidden";
+}
+
+
+/**
+ * Update table from sorted data
+ * @param {Array} data - An array of the case counts and regions
+ *                       sorted in non-increasing order
+ */
+function updateTable(data) {
+    const table = document.getElementById("table-body");
+    table.innerHTML = ""; // clear table
+    for (let i=0; i < data.length; i++) {
+        const row = document.createElement("tr");
+        const count = document.createElement("td");
+        const region = document.createElement("td");
+
+        count.innerText = data[i]["cases"].toLocaleString();
+        region.innerText = data[i]["title"];
+
+        row.appendChild(region);
+        row.appendChild(count);
+        table.appendChild(row);
+    }
 }
