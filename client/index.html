@@ -47,14 +47,18 @@
             <div class="filter-item">
               <div class="filter-label">Age Group</div>
               <div id="range-wrap">
-              <input type="range" class="form-range" min="0" max="5" step="1" id="ageRange" onchange="APIwrapper(handleAgeGroup)">
+              <input type="range" class="form-range" min="0" max="7" step="1" id="ageRange" onchange="APIwrapper(handleAgeGroup)">
               <output id="ageRange-bubble"></output>
               </div>
             </div>
 
             <div class="filter-item">
                 <div class="filter-label">Date Range</div>
-                <input type="text" name="dates" value="01/01/2018 - 01/15/2018" />
+                <input id="dateRange" type="text" name="dates" value="01/01/2018 - 01/15/2018" />
+            </div>
+
+            <div class="filter-item">
+                <button type="button" class="btn btn-danger" onclick="reset()">Reset</button>
             </div>
 
             </div>
@@ -99,9 +103,19 @@
         }
 
         // age group handler
-        const groups = ['<20', '20-39', '40-59', '60-69', '70-79', '>80'];
+        const groups = ["A", "B", "C", "D", "E", "F", "G", "H"];
+        const map = {
+            "A": "< 20",
+            "B": "20-29",
+            "C": "30-39",
+            "D": "40-49",
+            "E": "50-59",
+            "F": "60-69",
+            "G": "70-79",
+            "H": "80+"
+        }
         function handleAgeGroup() { 
-            PARAMS['ageGroup'] = groups[document.getElementById("ageRange").value];
+            PARAMS['ageRange'] = groups[document.getElementById("ageRange").value];
             viewQueryString();
         }
 
@@ -111,7 +125,7 @@
             const min = range.min ? range.min : 0;
             const max = range.max ? range.max : 100;
             const newVal = Number(((val - min) * 100) / (max - min));
-            bubble.innerHTML = groups[val];
+            bubble.innerHTML = map[groups[val]];
 
             bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
             bubble.style.visibility = 'visible';
@@ -142,6 +156,16 @@
 
         function viewQueryString() {
             document.getElementById('query-string').innerText = formatParams(PARAMS);
+        }
+
+        // reset query parameters to default
+        function reset() {
+            document.getElementById("ageRange-bubble").style.visibility = "hidden";
+            document.getElementById("btnradio3").checked = true;
+            document.getElementById("dateRange").value = "01/01/2020 - 03/14/2020";
+            PARAMS = {};
+            viewQueryString();
+            getData();
         }
 
     </script>
